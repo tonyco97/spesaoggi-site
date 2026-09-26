@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>SpesaOggi · Offerte Pesaro</title>
+  <meta name="description" content="Le offerte di oggi dei supermercati di Pesaro, aggiornate ogni giorno.">
+  <meta name="theme-color" content="#109648">
+  <meta property="og:title" content="SpesaOggi · Offerte Pesaro">
+  <meta property="og:description" content="Le offerte del giorno dei negozi di Pesaro: supermercati, brico, elettronica e altro, aggiornate ogni mattina.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tonyco97.github.io/spesaoggi-site/">
+  <meta property="og:image" content="https://tonyco97.github.io/spesaoggi-site/icons/icon-512.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="SpesaOggi">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-top">
+      <h1>🛒 Spesa<span class="brand">Oggi</span> <span class="city">Pesaro</span></h1>
+      <span id="updated" class="updated"></span>
+    </div>
+    <div class="toolbar">
+      <div class="searchwrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="Cerca in tutti i negozi…" autocomplete="off">
+        <button id="searchClear" class="clearbtn" hidden aria-label="Cancella ricerca">✕</button>
+      </div>
+      <button id="sortBtn" class="iconbtn" aria-label="Ordina e filtra le offerte">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5h10M11 9h7M11 13h4"/><path d="m3 17 3 3 3-3"/><path d="M6 18V4"/></svg>
+        <span id="sortDot" class="dot" hidden></span>
+      </button>
+      <button id="listBtn" class="iconbtn" aria-label="Lista della spesa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2.5 3h2l2.3 12.2a1.8 1.8 0 0 0 1.8 1.5h8.9a1.8 1.8 0 0 0 1.8-1.4L21.5 7H6"/></svg>
+        <span id="listCount" class="countbadge" hidden></span>
+      </button>
+    </div>
+  </header>
+  <div class="navwrap">
+    <nav id="groups" class="groups"></nav>
+    <div class="navrow">
+      <button id="storeBtn" class="storebtn" aria-haspopup="dialog"></button>
+      <button id="catBtn" class="storebtn catbtn" aria-haspopup="dialog"></button>
+      <button id="flyerBtn" class="flyerbtn" hidden aria-label="Volantino del negozio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="recentBar" class="watchbar" hidden></div>
+  <div id="installBar" class="installbar" hidden>
+    <span>📲 Installa SpesaOggi sulla schermata Home</span>
+    <button id="installGo">Installa</button>
+    <button id="installNo" aria-label="Nascondi">✕</button>
+  </div>
+  <div id="globalHint" class="global-hint" hidden>🔎 Risultati da tutti i negozi</div>
+  <div id="watchBar" class="watchbar" hidden></div>
+  <div id="staleHint" class="global-hint warn" hidden></div>
+  <div id="stale-banner" class="stale-banner" hidden>⚠️ Dati non aggiornati di recente</div>
+
+  <main>
+    <div id="grid" class="grid"></div>
+    <div id="empty" class="empty" hidden>Nessuna offerta trovata 🤷</div>
+    <div id="sentinel"></div>
+  </main>
+
+  <footer class="footer">
+    Dati raccolti automaticamente da siti ufficiali e volantini pubblici · non affiliato ai negozi
+  </footer>
+
+  <div id="storeSheet" class="sheet" hidden>
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <input id="storeSearch" class="sheet-search" type="search" placeholder="Cerca un negozio…" autocomplete="off">
+      <div id="storeList"></div>
+    </div>
+  </div>
+
+  <div id="catSheet" class="sheet" hidden>
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <input id="catSearch" class="sheet-search" type="search" placeholder="Cerca una categoria…" autocomplete="off">
+      <div id="catList"></div>
+    </div>
+  </div>
+
+  <div id="flyerSheet" class="sheet" hidden>
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <p class="sheet-title" id="flyerTitle">Volantini</p>
+      <div id="flyerList"></div>
+    </div>
+  </div>
+
+  <div id="sheet" class="sheet" hidden>
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel" role="menu" aria-label="Ordinamento">
+      <div class="sheet-handle"></div>
+      <p class="sheet-title">Ordina per</p>
+      <button class="sheet-opt" data-sort="default">📰 Ordine volantino</button>
+      <button class="sheet-opt" data-sort="discount">🔥 Sconto maggiore</button>
+      <button class="sheet-opt" data-sort="price-asc">💶 Prezzo crescente</button>
+      <button class="sheet-opt" data-sort="price-desc">💰 Prezzo decrescente</button>
+      <p class="sheet-title filters-title">Filtra</p>
+      <div class="filter-row">
+        <button class="fchip" data-filter="expiring">⏳ In scadenza</button>
+        <button class="fchip" data-filter="bigdiscount">🔥 Sconto ≥30%</button>
+        <button class="fchip" data-filter="newonly">✨ Novità</button>
+      </div>
+      <div id="watchManage" hidden>
+        <p class="sheet-title filters-title">Avvisi attivi</p>
+        <div class="filter-row" id="watchTerms"></div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">Prezzo max</span>
+        <button class="fchip" data-maxprice="1">1 €</button>
+        <button class="fchip" data-maxprice="3">3 €</button>
+        <button class="fchip" data-maxprice="5">5 €</button>
+      </div>
+      <button class="sheet-opt" id="themeToggle">🌗 Tema: automatico</button>
+      <button class="sheet-opt" id="resetFilters">♻️ Azzera filtri e ordinamento</button>
+      <button class="sheet-opt" id="resetAll">🔄 Ripristina tutto (negozio, categoria, filtri)</button>
+    </div>
+  </div>
+
+  <div id="detailSheet" class="sheet" hidden>
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <div id="detailBody"></div>
+    </div>
+  </div>
+
+  <div id="listSheet" class="sheet" hidden>
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <p class="sheet-title">🛒 Lista della spesa</p>
+      <div id="listItems"></div>
+      <div id="listFooter" class="list-footer"></div>
+    </div>
+  </div>
+
+  <button id="topBtn" class="topbtn" hidden aria-label="Torna su">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 14 7-7 7 7"/></svg>
+  </button>
+
+  <script src="app.js"></script>
+</body>
+</html>
